@@ -1,8 +1,10 @@
 package com.example.weatherapp.data.remote
 
+import com.example.weatherapp.data.model.ItemDto
+import retrofit2.http.GET
+
 interface ApiService {
 
-//
-//    @GET("users")
-//    suspend fun getUsers(): List<User>
+    @GET("posts")
+    suspend fun getItems(): List<ItemDto>
 }

@@ -1,4 +1,3 @@
 package com.example.weatherapp.data.model
 
-class ItemDto {
-}
+data class ItemDto(val userId: Int, val id: Int, val title: String, val body: String)
