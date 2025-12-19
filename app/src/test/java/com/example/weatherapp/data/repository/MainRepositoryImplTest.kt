@@ -1,7 +1,6 @@
 package com.example.weatherapp.data.repository
 
 import androidx.compose.runtime.collectAsState
-import com.example.weatherapp.data.model.ItemDto
 import com.example.weatherapp.data.remote.ApiService
 import com.example.weatherapp.utils.ConnectivityObserver
 import io.mockk.every

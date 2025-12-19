@@ -34,11 +34,10 @@ object NetworkModule {
     fun provideConverterFactory(): GsonConverterFactory =
         GsonConverterFactory.create()
 
-
     @Provides
     @Singleton
     fun provideRetrofit(ok: OkHttpClient, gsonConverterFactory: GsonConverterFactory): Retrofit = Retrofit.Builder()
-        .baseUrl("https://jsonplaceholder.typicode.com/")
+        .baseUrl("https://api.open-meteo.com/")
         .client(ok)
         .addConverterFactory(gsonConverterFactory)
         .build()

@@ -1,10 +1,14 @@
 package com.example.weatherapp.data.remote
 
-import com.example.weatherapp.data.model.ItemDto
+import com.example.weatherapp.data.model.WeatherResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
-
-    @GET("posts")
-    suspend fun getItems(): List<ItemDto>
+    @GET("v1/forecast")
+    suspend fun getWeather(
+        @Query("latitude") lat: Double,
+        @Query("longitude") lon: Double,
+        @Query("current_weather") current: Boolean = true
+    ): WeatherResponse
 }

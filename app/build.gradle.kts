@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -102,4 +103,10 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.0.0")
     testImplementation("io.mockk:mockk:1.13.10")
 // OR Mockito (choose one)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+    implementation("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
+
+//    Ye hi provide karta hai -> LocationServices.getFusedLocationProviderClient(context)
+//    implementation("com.google.android.gms:play-services-location:22.3.0")
 }

@@ -1,8 +1,6 @@
 package com.example.weatherapp.ui.main
 
 import app.cash.turbine.test
-import com.example.weatherapp.data.model.ItemDto
-import com.example.weatherapp.data.repository.MainRepositoryImpl
 import com.example.weatherapp.utils.Resource
 import io.mockk.coEvery
 import io.mockk.every
