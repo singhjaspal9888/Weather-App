@@ -18,6 +18,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://api.open-meteo.com/\""
+        )
     }
 
     buildTypes {
@@ -38,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -109,4 +116,6 @@ dependencies {
 
 //    Ye hi provide karta hai -> LocationServices.getFusedLocationProviderClient(context)
 //    implementation("com.google.android.gms:play-services-location:22.3.0")
+
+
 }

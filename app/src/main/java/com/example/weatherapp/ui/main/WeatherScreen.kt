@@ -4,9 +4,11 @@ import android.Manifest
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,69 +23,119 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.weatherapp.utils.ConnectivityObserver
+
 
 @Composable
 fun WeatherScreen(
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
 
+    val connectivityStatus by viewModel.connectivityObserver
+        .observe()
+        .collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.Available)
+    val context = LocalContext.current
     var hasPermission by remember { mutableStateOf(false) }
 
-    val requestPermission = rememberLocationPermissionLauncher {
-        hasPermission = true
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasPermission = isGranted
+        if (!isGranted) {
+            Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
+        }
     }
 
     LaunchedEffect(Unit) {
-        requestPermission()
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     if (!hasPermission) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Location permission required")
-        }
+        PermissionRequiredScreen()
         return
     }
 
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val state by viewModel.uiState.collectAsState()
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        when (state) {
-            is WeatherUiState.Loading -> CircularProgressIndicator()
-
-            is WeatherUiState.Success -> {
-                val data = (state as WeatherUiState.Success).data
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Current Location")
-                    Text("${data.temperature} °C", fontSize = 40.sp)
-                    Text("Wind: ${data.windspeed} km/h")
-                }
-            }
-
-            is WeatherUiState.Error -> {
-                Text("Location / Weather error ❌")
+    if (connectivityStatus == ConnectivityObserver.Status.Available) {
+        WeatherContent(state)
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text("No internet connection ❌")
+            Button(onClick = { /* Trigger fetchWeather again */ }) {
+                Text("Retry")
             }
         }
     }
 }
-@Composable
-fun rememberLocationPermissionLauncher(
-    onPermissionGranted: () -> Unit
-): () -> Unit {
 
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) onPermissionGranted()
-        else Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
-    }
-
-    return { launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION) }
-}
+//@Composable
+//fun WeatherScreen(
+//    viewModel: WeatherViewModel = hiltViewModel()
+//) {
+//
+//    var hasPermission by remember { mutableStateOf(false) }
+//
+//    val requestPermission = rememberLocationPermissionLauncher {
+//        hasPermission = true
+//    }
+//
+//    LaunchedEffect(Unit) {
+//        requestPermission()
+//    }
+//
+//    if (!hasPermission) {
+//        Box(
+//            modifier = Modifier.fillMaxSize(),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text("Location permission required")
+//        }
+//        return
+//    }
+//
+//
+//    val state by viewModel.uiState.collectAsState()
+//
+//    Box(
+//        modifier = Modifier.fillMaxSize(),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        when (state) {
+//            is WeatherUiState.Loading -> CircularProgressIndicator()
+//
+//            is WeatherUiState.Success -> {
+//                val data = (state as WeatherUiState.Success).data
+//                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                    Text("Current Location")
+//                    Text("${data.temperature} °C", fontSize = 40.sp)
+//                    Text("Wind: ${data.windspeed} km/h")
+//                }
+//            }
+//
+//            is WeatherUiState.Error -> {
+//                Text("Location / Weather error ❌")
+//            }
+//        }
+//    }
+//}
+//@Composable
+//fun rememberLocationPermissionLauncher(
+//    onPermissionGranted: () -> Unit
+//): () -> Unit {
+//
+//    val context = LocalContext.current
+//    val launcher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.RequestPermission()
+//    ) { isGranted: Boolean ->
+//        if (isGranted) onPermissionGranted()
+//        else Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+//    }
+//
+//    return { launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION) }
+//}
