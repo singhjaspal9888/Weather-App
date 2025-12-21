@@ -10,6 +10,3 @@ class MyApp : Application() {
         // Debug-only memory leak detector or analytics init
     }
 }
-
-//https://github.com/Prashant-Chandel/MVVM-Clean-Architech-HILT-Jetpack-Compose-Junit-Mockito
-//https://medium.com/@janishar.ali/android-mvvm-architecture-for-a-production-ready-app-2892b6dca02f

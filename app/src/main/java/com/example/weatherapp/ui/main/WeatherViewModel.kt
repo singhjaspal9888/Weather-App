@@ -6,8 +6,6 @@ import com.example.weatherapp.data.repository.LocationRepository
 import com.example.weatherapp.data.repository.WeatherRepository
 import com.example.weatherapp.utils.ConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
