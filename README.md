@@ -161,7 +161,7 @@ This reflects a **production-oriented development mindset**.
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/your-username/weather-app-android.git
+   git clone https://github.com/singhjaspal9888/Weather-App.git
    ```
 
 2. Open the project in **Android Studio**
